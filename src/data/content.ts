@@ -215,8 +215,9 @@ export const scenes: SceneMeta[] = [
   {
     key: 'verdict', code: 'My Verdict', title: 'Valoración personal', section: 'verdict', seconds: 35,
     notes: [
-      'Contar nuestra opinión con nuestras palabras (rellenar en content.ts después de probarlo).',
-      'Qué nos ha resultado cómodo, qué mejoraríamos y cómo lo vemos frente a Eclipse.',
+      'Luis Miguel: lo cómodo (autocompletado e interfaz).',
+      'Daniel: lo que mejoraríamos (memoria, demasiadas opciones, partes de pago).',
+      'Miguel: frente a Eclipse y la conclusión.',
     ],
   },
   {
@@ -235,10 +236,10 @@ export const scenes: SceneMeta[] = [
  * la escena muestra la pregunta guía y la etiqueta "Pendiente de redactar".
  */
 export const verdict = {
-  comfortable: '',
-  improve: '',
-  vsEclipse: '',
-  conclusion: '',
+  comfortable: 'El autocompletado: con escribir «sout» ya sale el System.out.println y va sugiriendo el código mientras escribimos. Y la interfaz, más limpia y ordenada que la de Eclipse.',
+  improve: 'Consume bastante memoria y tiene tantas opciones que al principio cuesta encontrar las cosas. Además, algunas funciones son de pago, aunque con la licencia de estudiante las tenemos gratis.',
+  vsEclipse: 'Nos quedamos con IntelliJ: es más completo y es el que más se usa en las empresas, así que aprenderlo ahora nos sirve para el futuro.',
+  conclusion: 'Se lo recomendaríamos a cualquier compañero de DAM, con un aviso: hay que dedicarle un rato a conocerlo y necesita un ordenador con algo de memoria.',
 };
 
 export interface Source {
