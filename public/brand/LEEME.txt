@@ -1,0 +1,4 @@
+Logotipo (opcional) de la portada.
+Descarga el logotipo oficial de IntelliJ IDEA desde la página de recursos de marca de JetBrains
+(https://www.jetbrains.com/company/brand/) y guárdalo aquí como:  intellij-idea.svg
+Si el archivo no existe, la portada se muestra solo con el título.
