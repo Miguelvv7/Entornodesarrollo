@@ -4,6 +4,7 @@ import { ChevronRight, Folder, FileCode2, Coffee, Settings2, FileText, Library, 
 import { SceneShell, Panel, Label, Kbd, SimBadge } from '../components/SceneShell';
 import { Reveal } from '../components/Reveal';
 import { CodeEditor } from '../components/CodeEditor';
+import { BuildExplainer } from './BuildExplainer';
 import { usePrint } from '../lib/mode';
 import type { SceneProps } from './types';
 
@@ -171,7 +172,6 @@ function KtsLine({ text }: { text: string }) {
     </>
   );
 }
-const deco = (lang: 'xml' | 'kts') => (_n: number, t: string) => (lang === 'xml' ? <XmlLine text={t} /> : <KtsLine text={t} />);
 
 function Tree({ lines, size = 19 }: { lines: TreeLine[]; size?: number }) {
   return (
@@ -203,62 +203,36 @@ const purpose: Record<Sys, { what: string; use: string }> = {
   },
 };
 
-const ideBar = (
-  <div className="flex items-center gap-4 rounded-2xl border border-lilac/25 bg-violet/[0.06] px-6 py-3.5 text-[18px] text-snow/85">
-    <RefreshCw size={20} className="shrink-0 text-lilac" />
-    <span><span className="font-medium text-snow">En IntelliJ:</span> detecta el pom.xml o el build.gradle al abrir el proyecto, descarga las librerías, muestra la ventana Maven o Gradle con sus fases y tareas, y al editar el archivo ofrece recargarlo <Kbd>⇧⌘I</Kbd>.</span>
-  </div>
-);
 
 export function S05Structure({ index }: SceneProps) {
   const print = usePrint();
+  const [view, setView] = useState<'explain' | 'lab'>('explain');
+  const pill = <div className="absolute -top-[104px] right-0 rounded-full border border-[#E5B567]/50 bg-[#E5B567]/10 px-5 py-2 font-mono text-[17px] uppercase tracking-[0.14em] text-[#E5B567]">★ Punto extra · no visto en clase</div>;
+  const title = <><span className="text-lilac">Maven</span>, <span className="text-lilac">Gradle</span>… o IntelliJ.</>;
 
   if (print) {
-    const rows: [string, Record<Sys, string>][] = [
-      ['Para qué sirve', { idea: 'Compilar con el botón del IDE, sin ayudante. Para ejercicios de clase', maven: 'Descarga solo lo que necesitamos y monta el programa igual en cualquier ordenador', gradle: 'Lo mismo que Maven, pero más rápido. El de Android' }],
-      ['Configuración', { idea: '.iml + .idea (lo gestiona el IDE)', maven: 'pom.xml (XML)', gradle: 'build.gradle.kts (Kotlin) o .gradle (Groovy)' }],
-      ['Estructura', { idea: 'src/ libre', maven: 'src/main/java · src/test/java', gradle: 'src/main/java · src/test/java' }],
-      ['Dependencias', { idea: 'A mano en Project Structure', maven: 'Automáticas desde Maven Central', gradle: 'Automáticas desde Maven Central' }],
-      ['Cómo trabaja', { idea: 'Build Project (⌘F9)', maven: 'Fases: compile → test → package', gradle: 'Tareas e incremental con caché' }],
-      ['Compilar', { idea: 'Desde el IDE', maven: 'mvn package', gradle: './gradlew build' }],
-      ['Salida', { idea: 'out/', maven: 'target/notas-1.0.jar', gradle: 'build/libs/notas.jar' }],
-      ['Ideal para', { idea: 'Ejercicios sencillos de clase', maven: 'Proyectos Java clásicos y empresa', gradle: 'Proyectos grandes y Android' }],
-    ];
     return (
-      <SceneShell index={index} glow="bl" title={<><span className="text-lilac">Maven</span>, <span className="text-lilac">Gradle</span>… o IntelliJ.</>}
-        lead="Son como una receta: apuntamos los ingredientes que necesita el proyecto y Maven o Gradle los consiguen y montan el programa, siempre igual y en cualquier ordenador. IntelliJ nos deja elegir al crear el proyecto.">
-        <div className="flex h-full flex-col gap-5">
-          <div className="absolute -top-[104px] right-0 rounded-full border border-[#E5B567]/50 bg-[#E5B567]/10 px-5 py-2 font-mono text-[17px] uppercase tracking-[0.14em] text-[#E5B567]">★ Punto extra · no visto en clase</div>
-          <div className="grid min-h-0 flex-1 grid-cols-[1fr_520px] gap-8">
-            <table className="w-full text-[17px]">
-              <thead><tr className="text-left font-mono text-[14px] uppercase tracking-[0.14em] text-mute"><th className="pb-2" /><th>IntelliJ</th><th>Maven</th><th>Gradle</th></tr></thead>
-              <tbody>
-                {rows.map(([k, v]) => (
-                  <tr key={k} className="border-t border-line align-top">
-                    <td className="py-2 pr-4 font-mono text-[13px] uppercase tracking-[0.12em] text-mute">{k}</td>
-                    <td className="py-2 pr-4 text-snow/85">{v.idea}</td>
-                    <td className="py-2 pr-4 text-snow/85">{v.maven}</td>
-                    <td className="py-2 text-snow/85">{v.gradle}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-            <div className="flex min-h-0 flex-col gap-4">
-              <Label>La misma librería (JUnit) en cada uno</Label>
-              <CodeEditor code={systems.maven.short} fileName="pom.xml" fontSize={14} decorate={deco('xml')} />
-              <CodeEditor code={systems.gradle.short} fileName="build.gradle.kts" fontSize={14} decorate={deco('kts')} />
-            </div>
-          </div>
-          {ideBar}
-        </div>
+      <SceneShell index={index} glow="bl" title={title}>
+        {pill}
+        <BuildExplainer still />
       </SceneShell>
     );
   }
 
   return (
-    <SceneShell index={index} glow="bl" title={<><span className="text-lilac">Maven</span>, <span className="text-lilac">Gradle</span>… o IntelliJ.</>}>
-      <div className="absolute -top-[104px] right-0 rounded-full border border-[#E5B567]/50 bg-[#E5B567]/10 px-5 py-2 font-mono text-[17px] uppercase tracking-[0.14em] text-[#E5B567]">★ Punto extra · no visto en clase</div>
-      <BuildLab />
+    <SceneShell index={index} glow="bl" title={title}>
+      {pill}
+      <div className="absolute -top-[46px] right-0 flex gap-2 rounded-2xl border border-line bg-surface/70 p-1.5" role="tablist" aria-label="Vista">
+        {([['explain', '1 · Qué es cada uno'], ['lab', '2 · Pruébalo']] as const).map(([k, l]) => (
+          <button key={k} role="tab" aria-selected={view === k} onClick={() => setView(k)}
+            className={`rounded-xl px-4 py-1.5 text-[16px] transition ${view === k ? 'bg-violet/25 text-snow' : 'text-mute hover:text-snow'}`}>{l}</button>
+        ))}
+      </div>
+      <AnimatePresence mode="wait">
+        <motion.div key={view} className="h-full" initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -8 }} transition={{ duration: 0.25 }}>
+          {view === 'explain' ? <BuildExplainer /> : <BuildLab />}
+        </motion.div>
+      </AnimatePresence>
     </SceneShell>
   );
 }
