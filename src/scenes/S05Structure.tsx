@@ -188,6 +188,21 @@ function Tree({ lines, size = 19 }: { lines: TreeLine[]; size?: number }) {
   );
 }
 
+const purpose: Record<Sys, { what: string; use: string }> = {
+  maven: {
+    what: 'Un ayudante que prepara el proyecto por nosotros. Apuntamos en una lista (el pom.xml) lo que necesitamos y él lo descarga y monta el programa.',
+    use: 'Para usar código hecho por otros sin buscarlo a mano, y para que el proyecto funcione igual en el ordenador de cualquier compañero.',
+  },
+  gradle: {
+    what: 'Otro ayudante que hace lo mismo que Maven, pero más moderno. La lista se escribe más corta.',
+    use: 'Es más rápido: se acuerda de lo que ya hizo y no lo repite. Es el que usan todas las apps de Android.',
+  },
+  idea: {
+    what: 'Sin ayudante: el propio IntelliJ compila el programa cuando le damos al botón, como hacemos siempre en clase.',
+    use: 'Para ejercicios sencillos como los nuestros. Si necesitamos algo de fuera, hay que añadirlo a mano, y el proyecto solo va bien en IntelliJ.',
+  },
+};
+
 const ideBar = (
   <div className="flex items-center gap-4 rounded-2xl border border-lilac/25 bg-violet/[0.06] px-6 py-3.5 text-[18px] text-snow/85">
     <RefreshCw size={20} className="shrink-0 text-lilac" />
@@ -200,6 +215,7 @@ export function S05Structure({ index }: SceneProps) {
 
   if (print) {
     const rows: [string, Record<Sys, string>][] = [
+      ['Para qué sirve', { idea: 'Compilar con el botón del IDE, sin ayudante. Para ejercicios de clase', maven: 'Descarga solo lo que necesitamos y monta el programa igual en cualquier ordenador', gradle: 'Lo mismo que Maven, pero más rápido. El de Android' }],
       ['Configuración', { idea: '.iml + .idea (lo gestiona el IDE)', maven: 'pom.xml (XML)', gradle: 'build.gradle.kts (Kotlin) o .gradle (Groovy)' }],
       ['Estructura', { idea: 'src/ libre', maven: 'src/main/java · src/test/java', gradle: 'src/main/java · src/test/java' }],
       ['Dependencias', { idea: 'A mano en Project Structure', maven: 'Automáticas desde Maven Central', gradle: 'Automáticas desde Maven Central' }],
@@ -210,7 +226,7 @@ export function S05Structure({ index }: SceneProps) {
     ];
     return (
       <SceneShell index={index} glow="bl" title={<><span className="text-lilac">Maven</span>, <span className="text-lilac">Gradle</span>… o IntelliJ.</>}
-        lead="Maven y Gradle descargan las librerías y compilan, prueban y empaquetan el proyecto siempre igual, en cualquier ordenador y con cualquier IDE. IntelliJ deja elegirlos al crear el proyecto.">
+        lead="Son como una receta: apuntamos los ingredientes que necesita el proyecto y Maven o Gradle los consiguen y montan el programa, siempre igual y en cualquier ordenador. IntelliJ nos deja elegir al crear el proyecto.">
         <div className="flex h-full flex-col gap-5">
           <div className="absolute -top-[104px] right-0 rounded-full border border-[#E5B567]/50 bg-[#E5B567]/10 px-5 py-2 font-mono text-[17px] uppercase tracking-[0.14em] text-[#E5B567]">★ Punto extra · no visto en clase</div>
           <div className="grid min-h-0 flex-1 grid-cols-[1fr_520px] gap-8">
@@ -444,6 +460,16 @@ function BuildLab() {
             <span key={k} className="rounded-lg border border-line bg-surface/60 px-3 py-1.5 text-[15px]"><span className="text-mute">{k}: </span><span className="text-snow/90">{v}</span></span>
           ))}
         </div>
+      </Reveal>
+
+      <Reveal delay={0.13}>
+        <AnimatePresence mode="wait">
+          <motion.div key={sys} initial={{ opacity: 0, y: 6 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -6 }} transition={{ duration: 0.25 }}
+            className="grid grid-cols-2 gap-5 rounded-2xl border border-line bg-surface/60 px-6 py-3.5 text-[18px] leading-snug">
+            <div><span className="mr-2 font-mono text-[14px] uppercase tracking-[0.14em] text-lilac">Qué es</span><span className="text-snow/90">{purpose[sys].what}</span></div>
+            <div><span className="mr-2 font-mono text-[14px] uppercase tracking-[0.14em] text-sky">Para qué sirve</span><span className="text-snow/90">{purpose[sys].use}</span></div>
+          </motion.div>
+        </AnimatePresence>
       </Reveal>
 
       <Reveal delay={0.16} className="grid min-h-0 flex-1 grid-cols-[400px_1fr_600px] gap-5">
